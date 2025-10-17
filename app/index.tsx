@@ -1,5 +1,4 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
   View,
@@ -10,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import HomeScreen from "./screens/home";
 
 
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 
 export default function App() {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Home"
@@ -74,5 +75,6 @@ export default function App() {
         })}
       />
     </Stack.Navigator>
+      </GestureHandlerRootView>
   );
 }
