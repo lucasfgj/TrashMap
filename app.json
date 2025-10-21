@@ -1,25 +1,35 @@
 {
   "expo": {
-    "name": "trashmap",
-    "slug": "trashmap",
+    "name": "TrashMap",
+    "slug": "TrashMap",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/images/logoTrashMap.png",
     "scheme": "trashmap",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyCBs_5rLELLShtl5MR3lnIqova7IBWDGZg"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/logoTrashMap.png",
+        "backgroundImage": "./assets/images/backgroundTrashMap.png",
+        "monochromeImage": "./assets/images/backgroundTrashMap.png"
       },
+      "softwareKeyboardLayoutMode": "resize",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCBs_5rLELLShtl5MR3lnIqova7IBWDGZg"
+        }
+      },
+      "package": "com.anonymous.TrashMap"
     },
     "web": {
       "output": "static",
@@ -30,7 +40,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/logoTrashMap.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",

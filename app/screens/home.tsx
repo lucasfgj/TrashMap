@@ -1,79 +1,88 @@
-
-import React, { useRef, useMemo } from "react";
-import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
-import BottomSheet from "@gorhom/bottom-sheet";
-
+import React, {
+  useRef,
+} from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import CustomBottomSheet, { BottomSheetHandle } from "@/components/CustomBottomSheet";
+import SearchBar from "@/components/ui/searchBar";
+import CardRotas from "@/components/cardListRotas";
+                
 
 function HomeScreen() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["15%", "50%"], []);
-  const handlePresentSheet = () => {
-    bottomSheetRef.current?.snapToIndex(1);
-    console.log(
-      "Botão pressionado! Ref é:",
-      bottomSheetRef.current ? "válida" : "nula"
-    );
+  const bottomSheetRef = useRef<BottomSheetHandle | null>(null);
+
+  const initialRegion = {
+    latitude: -12.9777,
+    longitude: -38.5016,
+    latitudeDelta: 0.0922, // Zoom level
+    longitudeDelta: 0.0421, // Zoom level
   };
+
+  // ABRINDO NO ESTADO PADRÃO (50% da tela)
+  const handlePresentSheet = () => {
+    bottomSheetRef.current?.openDefault();
+  };
+  // CHAMA A FUNÇÃO `close()` para fechar completamente (0%)
+  const handleCloseSheet = () => {
+    bottomSheetRef.current?.close();
+  };
+  // CHAMA A FUNÇÃO `openFull()` para ir para 85%
+  const handleOpenFull = () => {
+    bottomSheetRef.current?.openFull();
+  };
+
   return (
-    <view style={styles.container}>
-      
-        
-      <View style={styles.mapPlaceholder}>
-        <Text style={styles.title}>Bem-vindo à Home! 🌎</Text>
-        <Text style={styles.subtitle}>O mapa aparecerá aqui!</Text>
-
-        <TouchableOpacity style={styles.button} onPress={handlePresentSheet}>
-          <Text style={styles.buttonText}>Abrir Detalhes da Área</Text>
-        </TouchableOpacity>
+    <View style={appStyles.container}>
+      <View style={appStyles.mapPlaceholder}>
+        <MapView
+          style={appStyles.map} // Estilo flex: 1 para ocupar o espaço
+          provider={PROVIDER_GOOGLE}
+          initialRegion={initialRegion}
+          showsUserLocation={true}
+          showsMyLocationButton={false} // Você pode habilitar se quiser (true)
+          // mapPadding={{ bottom: moderateScale(110) }} // Adiciona padding para botões sobre o mapa
+        >
+          {/* Exemplo de Marcador */}
+          {/* <Marker coordinate={{ latitude: -12.9777, longitude: -38.5016 }} title="Exemplo" /> */}
+          {/* No futuro, buscará os pontos da API e fará um map aqui */}
+        </MapView>
       </View>
-
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0} // Estado inicial: no primeiro ponto de parada ('15%')
-        snapPoints={snapPoints}
-        enablePanDownToClose={true} // Permite fechar arrastando para baixo
-        // Estilos para customizar o visual
-        handleIndicatorStyle={styles.handleIndicator}
-        backgroundStyle={styles.bottomSheetBackground}
-      >
-        {/* 4. Conteúdo dentro da Bottom Sheet */}
-        <View style={styles.contentContainer}>
-          <Text style={styles.sheetTitle}>Análise da Qualidade do Ar</Text>
-
-          <View style={styles.infoBox}>
-            <Text style={styles.infoText}>Nível de Poluição: Médio ⚠️</Text>
-            <Text style={styles.infoText}>
-              Sugestão: Evitar exercícios ao ar livre.
-            </Text>
+      <CustomBottomSheet ref={bottomSheetRef}>
+        <View style={appStyles.contentContainer}>
+          <View style={appStyles.viewPesquisa}>
+            <SearchBar
+              onChangeText={() => {
+                /* lógica para atualizar o estado de pesquisa */
+              }}
+              value={"" /* estado de pesquisa atual */}
+            />
           </View>
-
-          <Button
-            title="Ver Rotas Alternativas"
-            onPress={() => console.log("Navegar para Rotas")}
-          />
-
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => bottomSheetRef.current?.close()}
-          >
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
+          <View style={appStyles.viewRotas}>
+            <CardRotas />
+          </View>
         </View>
-      </BottomSheet>
-    </view>
+      </CustomBottomSheet>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-  },
+// Estilos para o App (HomeScreen original)
+const appStyles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#f0f0f0" },
+  
   mapPlaceholder: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingBottom: 200, // Garante que o botão não fique escondido pela prévia da folha
+    paddingBottom: 0,
+  },
+  map: {
+    flex: 1, // Faz o mapa ocupar todo o espaço disponível
   },
   title: {
     fontSize: 24,
@@ -96,58 +105,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-
-  // --- Estilos da Bottom Sheet ---
-  bottomSheetBackground: {
-    backgroundColor: "#FFFFFF", // Fundo branco da bandeja
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  handleIndicator: {
-    backgroundColor: "#ccc", // Cor da alça superior
-    width: 40,
-    height: 5,
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 20,
-    alignItems: "center",
-  },
   sheetTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 15,
     color: "#1E603A",
   },
-  infoBox: {
-    backgroundColor: "#FFFBEA", // Fundo levemente amarelado para alerta
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-    width: "100%",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#FFD700",
-  },
-  infoText: {
+  sheetText: {
     fontSize: 16,
-    color: "#333",
-    marginBottom: 5,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#000000ff",
   },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#eee",
-    borderRadius: 5,
+  contentContainer: {
+    flex: 1,
+    width: "100%",
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    gap: 45,
   },
-  closeButtonText: {
-    color: "#333",
-    fontWeight: "500",
+  viewPesquisa: {
+    width: "100%",
+  },
+
+  viewRotas: {
+    width: "100%",
+    flex: 1,
+    marginTop: 10,
   },
 });
 

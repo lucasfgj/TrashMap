@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import {
   View,
   Text,
-  Alert,
   TouchableOpacity,
   Image,
   StyleSheet,
@@ -11,6 +10,9 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import HomeScreen from "./screens/home";
+import UsuarioScreen from "./screens/usuario";
+import EditUsuarioScreen from "./screens/editUsuario";
+import NotificationScreen from "./screens/notificação";
 
 
 const Stack = createStackNavigator();
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+    
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Home"
@@ -52,12 +55,12 @@ export default function App() {
               size={30}
               color="#000"
               style={{ marginRight: 15 }}
-              onPress={() => Alert.alert("Barra de Notificação!!")}
+              onPress={() => navigation.navigate("Notification")}
             />,
 
             <TouchableOpacity
               key="profile"
-              onPress={() => Alert.alert("Perfil do Usuario!!")}
+              onPress={() => navigation.navigate("Usuario")}
               style={{ marginRight: 15 }}
             >
               <Image
@@ -73,8 +76,39 @@ export default function App() {
             </TouchableOpacity>,
           ],
         })}
-      />
-    </Stack.Navigator>
+        />
+      <Stack.Screen
+          name="Notification"
+          component={NotificationScreen}
+          options={{
+            title: "Notificações",
+            headerStyle: { backgroundColor: "#1E603A" },
+            headerTintColor: "#fff",
+            headerTitleStyle: { fontWeight: "bold" },
+          }}
+          />
+      <Stack.Screen
+        name="Usuario"
+        component={UsuarioScreen}
+        options={{
+          title: "Usuário",
+          headerStyle: { backgroundColor: "#1E603A" },
+          headerTintColor: "#fff",
+          headerTitleStyle: { fontWeight: "bold" },
+        }}
+        />
+      <Stack.Screen
+        name="EditUsuario"
+        component={EditUsuarioScreen}
+        options={{
+          title: "Editar Usuário",
+          headerStyle: { backgroundColor: "#1E603A" },
+          headerTintColor: "#fff",
+          headerTitleStyle: { fontWeight: "bold" },
+        }}
+        />
+      </Stack.Navigator>
+      
       </GestureHandlerRootView>
   );
 }
